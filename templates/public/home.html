@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Szkoła Językowa</title>
+</head>
+<body>
+    {% if content.logo_path %}
+        <img src="{{ url_for('static', filename='uploads/' + content.logo_path) }}" alt="Logo">
+    {% endif %}
+    <h1>{{ content.title }}</h1>
+    <p>{{ content.description }}</p>
+    <h2>Godziny otwarcia:</h2>
+    <p>{{ content.opening_hours }}</p>
+</body>
+</html>
