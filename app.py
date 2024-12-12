@@ -66,27 +66,49 @@ def admin_logout():
 
 
 # Edycja zawartości
-@app.route('/admin/edit', methods=['POST'])
+@app.route('/admin/edit/title', methods=['POST'])
 @login_required
-def edit_content():
+def edit_title():
     content = Content.query.first()
-    if content is None:
-        content = Content()
-        db.session.add(content)
-    
-    content.title = request.form['title']
-    content.description = request.form['description']
-    content.opening_hours = request.form['opening_hours']
-    
+    if content:
+        content.title = request.form['title']
+        db.session.commit()
+        flash('Tytuł został zaktualizowany')
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/edit/description', methods=['POST'])
+@login_required
+def edit_description():
+    content = Content.query.first()
+    if content:
+        content.description = request.form['description']
+        db.session.commit()
+        flash('Opis został zaktualizowany')
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/edit/opening_hours', methods=['POST'])
+@login_required
+def edit_opening_hours():
+    content = Content.query.first()
+    if content:
+        content.opening_hours = request.form['opening_hours']
+        db.session.commit()
+        flash('Godziny otwarcia zostały zaktualizowane')
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/edit/logo', methods=['POST'])
+@login_required
+def edit_logo():
+    content = Content.query.first()
     if 'logo' in request.files:
         file = request.files['logo']
         if file.filename:
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            content.logo_path = filename
-
-    db.session.commit()
-    flash('Zaktualizowano zawartość')
+            if content:
+                content.logo_path = filename
+                db.session.commit()
+                flash('Logo zostało zaktualizowane')
     return redirect(url_for('admin_dashboard'))
 
 if __name__ == '__main__':
