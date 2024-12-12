@@ -57,6 +57,14 @@ def admin_dashboard():
     content = Content.query.first()
     return render_template('admin/dashboard.html', content=content)
 
+@app.route('/admin/logout')
+@login_required
+def admin_logout():
+    logout_user()
+    flash("Zostałeś wylogowany")
+    return redirect(url_for('login'))
+
+
 # Edycja zawartości
 @app.route('/admin/edit', methods=['POST'])
 @login_required
