@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj Nauczyciela - Panel Administratora</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_styles.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1>Dodaj Nauczyciela</h1>
+                <div class="header-links">
+                    <a href="{{ url_for('manage_teachers') }}" class="nav-link">Powrót</a>
+                    <a href="{{ url_for('admin_logout') }}" class="nav-link">Wyloguj</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="form-container">
+                <form action="{{ url_for('add_teacher') }}" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="first_name">Imię</label>
+                        <input type="text" id="first_name" name="first_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_name">Nazwisko</label>
+                        <input type="text" id="last_name" name="last_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="specialization">Specjalizacja</label>
+                        <input type="text" id="specialization" name="specialization" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bio">Biografia</label>
+                        <textarea id="bio" name="bio" rows="5"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="photo">Zdjęcie</label>
+                        <input type="file" id="photo" name="photo" accept="image/*">
+                    </div>
+
+                    <button type="submit">Dodaj Nauczyciela</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

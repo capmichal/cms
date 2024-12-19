@@ -76,6 +76,83 @@ p {
     border-left: 4px solid #333;
 }
 
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.course-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.course-card h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.course-description {
+    margin-bottom: 15px;
+}
+
+.course-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.teachers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.teacher-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.teacher-card img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.teacher-card h3 {
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.specialization {
+    color: #666;
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.bio {
+    font-size: 0.9em;
+    color: #444;
+}
+
+@media (max-width: 768px) {
+    .courses-grid,
+    .teachers-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
     .section {
         padding: 20px;
@@ -89,3 +166,4 @@ p {
         margin-top: 120px;
     }
 }
+

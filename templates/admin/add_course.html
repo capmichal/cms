@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dodaj Kurs - Panel Administratora</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_styles.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1>Dodaj Kurs</h1>
+                <div class="header-links">
+                    <a href="{{ url_for('manage_courses') }}" class="nav-link">Powrót</a>
+                    <a href="{{ url_for('admin_logout') }}" class="nav-link">Wyloguj</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="form-container">
+                <form action="{{ url_for('add_course') }}" method="POST">
+                    <div class="form-group">
+                        <label for="name">Nazwa kursu</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Opis</label>
+                        <textarea id="description" name="description" rows="5" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="level">Poziom</label>
+                        <select id="level" name="level" required>
+                            <option value="A1">A1 - Początkujący</option>
+                            <option value="A2">A2 - Podstawowy</option>
+                            <option value="B1">B1 - Średniozaawansowany</option>
+                            <option value="B2">B2 - Wyższy średniozaawansowany</option>
+                            <option value="C1">C1 - Zaawansowany</option>
+                            <option value="C2">C2 - Biegły</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">Cena</label>
+                        <input type="number" id="price" name="price" step="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration">Czas trwania (godziny)</label>
+                        <input type="number" id="duration" name="duration" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="teacher_id">Nauczyciel</label>
+                        <select id="teacher_id" name="teacher_id" required>
+                            {% for teacher in teachers %}
+                            <option value="{{ teacher.id }}">{{ teacher.first_name }} {{ teacher.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="is_active" checked>
+                            Kurs aktywny
+                        </label>
+                    </div>
+
+                    <button type="submit">Dodaj Kurs</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

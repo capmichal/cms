@@ -31,6 +31,40 @@
                     <p>{{ content.opening_hours }}</p>
                 </div>
             </section>
+
+            <section class="section">
+                <h2>Nasze kursy</h2>
+                <div class="courses-grid">
+                    {% for course in courses %}
+                    <div class="course-card">
+                        <h3>{{ course.name }}</h3>
+                        <p class="course-description">{{ course.description }}</p>
+                        <p class="course-details">
+                            <span class="level">Poziom: {{ course.level }}</span>
+                            <span class="duration">Czas trwania: {{ course.duration }} godzin</span>
+                            <span class="price">Cena: {{ course.price }} zł</span>
+                        </p>
+                        <p class="teacher">Prowadzący: {{ course.teacher.first_name }} {{ course.teacher.last_name }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Nasi nauczyciele</h2>
+                <div class="teachers-grid">
+                    {% for teacher in teachers %}
+                    <div class="teacher-card">
+                        {% if teacher.photo_path %}
+                        <img src="{{ url_for('static', filename='uploads/' + teacher.photo_path) }}" alt="{{ teacher.first_name }} {{ teacher.last_name }}">
+                        {% endif %}
+                        <h3>{{ teacher.first_name }} {{ teacher.last_name }}</h3>
+                        <p class="specialization">{{ teacher.specialization }}</p>
+                        <p class="bio">{{ teacher.bio }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
         </div>
     </main>
 </body>

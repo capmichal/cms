@@ -29,6 +29,28 @@ class Content(db.Model):
     opening_hours = db.Column(db.String(200), nullable=False)
     logo_path = db.Column(db.String(200))
 
+# Nowy model nauczyciela
+class Teacher(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    specialization = db.Column(db.String(100), nullable=False)
+    bio = db.Column(db.Text)
+    photo_path = db.Column(db.String(200))
+    courses = db.relationship('Course', backref='teacher', lazy=True)
+
+# Nowy model kursu
+class Course(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    level = db.Column(db.String(20), nullable=False)
+    price = db.Column(db.Numeric(10, 2), nullable=False)
+    duration = db.Column(db.Integer, nullable=False)
+    teacher_id = db.Column(db.Integer, db.ForeignKey('teacher.id'), nullable=False)
+    is_active = db.Column(db.Boolean, default=True)
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -110,6 +132,67 @@ def edit_logo():
                 db.session.commit()
                 flash('Logo zostało zaktualizowane')
     return redirect(url_for('admin_dashboard'))
+
+
+# Nowe endpointy dla nauczycieli
+@app.route('/admin/teachers')
+@login_required
+def manage_teachers():
+    teachers = Teacher.query.all()
+    return render_template('admin/teachers.html', teachers=teachers)
+
+@app.route('/admin/teachers/add', methods=['GET', 'POST'])
+@login_required
+def add_teacher():
+    if request.method == 'POST':
+        photo = request.files['photo']
+        if photo:
+            filename = secure_filename(photo.filename)
+            photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            photo_path = filename
+        else:
+            photo_path = None
+
+        teacher = Teacher(
+            first_name=request.form['first_name'],
+            last_name=request.form['last_name'],
+            email=request.form['email'],
+            specialization=request.form['specialization'],
+            bio=request.form['bio'],
+            photo_path=photo_path
+        )
+        db.session.add(teacher)
+        db.session.commit()
+        flash('Nauczyciel został dodany')
+        return redirect(url_for('manage_teachers'))
+    return render_template('admin/add_teacher.html')
+
+# Nowe endpointy dla kursów
+@app.route('/admin/courses')
+@login_required
+def manage_courses():
+    courses = Course.query.all()
+    return render_template('admin/courses.html', courses=courses)
+
+@app.route('/admin/courses/add', methods=['GET', 'POST'])
+@login_required
+def add_course():
+    if request.method == 'POST':
+        course = Course(
+            name=request.form['name'],
+            description=request.form['description'],
+            level=request.form['level'],
+            price=float(request.form['price']),
+            duration=int(request.form['duration']),
+            teacher_id=int(request.form['teacher_id']),
+            is_active=True if request.form.get('is_active') else False
+        )
+        db.session.add(course)
+        db.session.commit()
+        flash('Kurs został dodany')
+        return redirect(url_for('manage_courses'))
+    teachers = Teacher.query.all()
+    return render_template('admin/add_course.html', teachers=teachers)
 
 if __name__ == '__main__':
     with app.app_context():
