@@ -11,7 +11,11 @@
         <div class="container">
             <div class="header-content">
                 <h1>Panel Administratora</h1>
-                <a href="{{ url_for('admin_logout') }}" style="color: white; text-decoration: none;">Wyloguj</a>
+                <div class="header-links">
+                    <a href="{{ url_for('admin_logout') }}" style="color: white; text-decoration: none;">Wyloguj</a>
+                    <a href="{{ url_for('manage_teachers') }}" style="color: white; text-decoration: none;">Nauczyciele</a>
+                    <a href="{{ url_for('manage_courses') }}" style="color: white; text-decoration: none;">Kursy</a>
+                </div>
             </div>
         </div>
     </header>

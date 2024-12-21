@@ -59,7 +59,9 @@ def load_user(user_id):
 @app.route('/')
 def home():
     content = Content.query.first()
-    return render_template('public/home.html', content=content)
+    teachers = Teacher.query.all()
+    courses = Course.query.all()
+    return render_template('public/home.html', content=content, teachers=teachers, courses=courses)
 
 # Panel logowania
 @app.route('/login', methods=['GET', 'POST'])
