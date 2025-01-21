@@ -169,6 +169,17 @@ def add_teacher():
         return redirect(url_for('manage_teachers'))
     return render_template('admin/add_teacher.html')
 
+
+@app.route('/admin/teacher/delete/<int:teacher_id>', methods=['GET', 'POST'])
+@login_required
+def delete_teacher(teacher_id):
+    
+    teacher = Teacher.query.get(teacher_id)
+    db.session.delete(teacher)
+    db.session.commit()
+    flash('Nauczyciel został usunięty')
+    return redirect(url_for('manage_teachers'))
+
 # Nowe endpointy dla kursów
 @app.route('/admin/courses')
 @login_required
@@ -195,6 +206,18 @@ def add_course():
         return redirect(url_for('manage_courses'))
     teachers = Teacher.query.all()
     return render_template('admin/add_course.html', teachers=teachers)
+
+@app.route('/admin/courses/delete/<int:course_id>', methods=['GET', 'POST'])
+@login_required
+def delete_course(course_id):
+    
+    course = Course.query.get(course_id)
+    db.session.delete(course)
+    db.session.commit()
+    flash('Kurs został usunięty')
+    return redirect(url_for('manage_courses'))
+
+
 
 if __name__ == '__main__':
     with app.app_context():

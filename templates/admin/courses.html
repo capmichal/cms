@@ -43,14 +43,14 @@
                         <p class="duration">Czas trwania: {{ course.duration }} godzin</p>
                         <p class="teacher">Prowadzący: {{ course.teacher.first_name }} {{ course.teacher.last_name }}</p>
                         <p class="status">Status: {{ 'Aktywny' if course.is_active else 'Nieaktywny' }}</p>
-                        {#
+
                         <div class="card-actions">
-                            <a href="{{ url_for('edit_course', course_id=course.id) }}" class="button">Edytuj</a>
+                            {# <a href="{{ url_for('edit_course', course_id=course.id) }}" class="button">Edytuj</a> #}
                             <form action="{{ url_for('delete_course', course_id=course.id) }}" method="POST" class="inline-form">
-                                <button type="submit" class="button delete">Usuń</button>
+                                <button type="submit" onclick="return confirm('Czy na pewno chcesz usunąć ten kurs?')" class="button delete">Usuń</button>
                             </form>
                         </div>
-                        #}
+
                     </div>
                 </div>
                 {% endfor %}
