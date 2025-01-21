@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edytuj Nauczyciela - Panel Administratora</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard_styles.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1>Edytuj Nauczyciela</h1>
+                <div class="header-links">
+                    <a href="{{ url_for('manage_teachers') }}" class="nav-link">Powrót</a>
+                    <a href="{{ url_for('admin_logout') }}" class="nav-link">Wyloguj</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="form-container">
+                <form action="{{ url_for('edit_teacher', teacher_id=teacher.id) }}" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="first_name">Imię</label>
+                        <input type="text" id="first_name" name="first_name" value="{{ teacher.first_name }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_name">Nazwisko</label>
+                        <input type="text" id="last_name" name="last_name" value="{{ teacher.last_name }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" value="{{ teacher.email }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="specialization">Specjalizacja</label>
+                        <input type="text" id="specialization" name="specialization" value="{{ teacher.specialization }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bio">Biografia</label>
+                        <textarea id="bio" name="bio" rows="5">{{ teacher.bio }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="photo">Zdjęcie</label>
+                        {% if teacher.photo_path %}
+                            <p>Aktualne zdjęcie: {{ teacher.photo_path }}</p>
+                        {% endif %}
+                        <input type="file" id="photo" name="photo" accept="image/*">
+                        <small>Zostaw puste, jeśli nie chcesz zmieniać zdjęcia</small>
+                    </div>
+
+                    <button type="submit">Zapisz zmiany</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

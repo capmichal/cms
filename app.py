@@ -175,10 +175,53 @@ def add_teacher():
 def delete_teacher(teacher_id):
     
     teacher = Teacher.query.get(teacher_id)
+
+    if teacher.courses:
+        flash("Próbujesz usunąć nauczyciela, który prowadzi obecnie kursy!")
+        return redirect(url_for('manage_teachers'))
+
     db.session.delete(teacher)
     db.session.commit()
     flash('Nauczyciel został usunięty')
     return redirect(url_for('manage_teachers'))
+
+@app.route('/admin/teachers/edit/<int:teacher_id>', methods=['GET', 'POST'])
+@login_required
+def edit_teacher(teacher_id):
+    teacher = Teacher.query.get(teacher_id)
+    
+    if request.method == 'POST':
+        teacher.first_name = request.form['first_name']
+        teacher.last_name = request.form['last_name']
+        teacher.email = request.form['email']
+        teacher.specialization = request.form['specialization']
+        teacher.bio = request.form['bio']
+        
+        # Obsługa zdjęcia
+        if 'photo' in request.files:
+            file = request.files['photo']
+            if file and file.filename:
+                # Usuń stare zdjęcie jeśli istnieje
+                if teacher.photo_path:
+                    old_photo_path = os.path.join(app.config['UPLOAD_FOLDER'], teacher.photo_path)
+                    if os.path.exists(old_photo_path):
+                        os.remove(old_photo_path)
+                
+                # Zapisz nowe zdjęcie
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                teacher.photo_path = filename
+
+        db.session.commit()
+        flash('Dane nauczyciela zostały zaktualizowane')
+        return redirect(url_for('manage_teachers'))
+        
+    return render_template('admin/edit_teacher.html', teacher=teacher)
+
+
+
+
+
 
 # Nowe endpointy dla kursów
 @app.route('/admin/courses')
@@ -216,6 +259,31 @@ def delete_course(course_id):
     db.session.commit()
     flash('Kurs został usunięty')
     return redirect(url_for('manage_courses'))
+
+
+
+@app.route('/admin/courses/edit/<int:course_id>', methods=['GET', 'POST'])
+@login_required
+def edit_course(course_id):
+    
+    course = Course.query.get(course_id)
+    
+    if request.method == 'POST':
+        course.name = request.form['name']
+        course.description = request.form['description']
+        course.level = request.form['level']
+        course.price = float(request.form['price'])
+        course.duration = int(request.form['duration'])
+        course.teacher_id = int(request.form['teacher_id'])
+        course.is_active = True if request.form.get('is_active') else False
+
+        db.session.commit()
+        flash('Kurs został edytowany')
+        return redirect(url_for('manage_courses'))
+    
+    teachers = Teacher.query.all()
+    return render_template('admin/edit_course.html', course=course, teachers=teachers)
+
 
 
 

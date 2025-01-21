@@ -55,9 +55,9 @@
                 <div class="teachers-grid">
                     {% for teacher in teachers %}
                     <div class="teacher-card">
-                        {% if teacher.photo_path %}
-                        <img src="{{ url_for('static', filename='uploads/' + teacher.photo_path) }}" alt="{{ teacher.first_name }} {{ teacher.last_name }}">
-                        {% endif %}
+
+                        <img src="{{ url_for('static', filename='uploads/' + (teacher.photo_path if teacher.photo_path else 'unknown_teacher.jpg')) }}" alt="{{ teacher.first_name }} {{ teacher.last_name }}">
+
                         <h3>{{ teacher.first_name }} {{ teacher.last_name }}</h3>
                         <p class="specialization">{{ teacher.specialization }}</p>
                         <p class="bio">{{ teacher.bio }}</p>
