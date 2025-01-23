@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Szkoła Językowa</title>
     <link rel="stylesheet" href="static/css/home_styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="header">
@@ -39,12 +40,12 @@
                     <div class="course-card">
                         <h3>{{ course.name }}</h3>
                         <p class="course-description">{{ course.description }}</p>
-                        <p class="course-details">
-                            <span class="level">Poziom: {{ course.level }}</span>
-                            <span class="duration">Czas trwania: {{ course.duration }} godzin</span>
-                            <span class="price">Cena: {{ course.price }} zł</span>
-                        </p>
-                        <p class="teacher">Prowadzący: {{ course.teacher.first_name }} {{ course.teacher.last_name }}</p>
+                        <div class="course-details">
+                            <span class="level">🎯 Poziom: {{ course.level }}</span>
+                            <span class="duration">⏱️ Czas trwania: {{ course.duration }} godzin</span>
+                            <span class="price">💰 Cena: {{ course.price }} zł</span>
+                            <span class="teacher">👨‍🏫 Prowadzący: {{ course.teacher.first_name }} {{ course.teacher.last_name }}</span>
+                        </div>
                     </div>
                     {% endfor %}
                 </div>
@@ -55,9 +56,8 @@
                 <div class="teachers-grid">
                     {% for teacher in teachers %}
                     <div class="teacher-card">
-
-                        <img src="{{ url_for('static', filename='uploads/' + (teacher.photo_path if teacher.photo_path else 'unknown_teacher.jpg')) }}" alt="{{ teacher.first_name }} {{ teacher.last_name }}">
-
+                        <img src="{{ url_for('static', filename='uploads/' + (teacher.photo_path if teacher.photo_path else 'unknown_teacher.jpg')) }}" 
+                             alt="{{ teacher.first_name }} {{ teacher.last_name }}">
                         <h3>{{ teacher.first_name }} {{ teacher.last_name }}</h3>
                         <p class="specialization">{{ teacher.specialization }}</p>
                         <p class="bio">{{ teacher.bio }}</p>
