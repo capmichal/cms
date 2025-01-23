@@ -108,9 +108,33 @@ p {
     background: var(--card-background);
     padding: 20px;
     border-radius: 6px;
-    border-left: 4px solid var(--secondary-color);
-    margin: 15px 0;
+    margin: 15px auto;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    max-width: 500px;
+    text-align: center;
+    border: 1px solid rgba(52, 152, 219, 0.2);
+    overflow: hidden;
+}
+
+.hours p {
+    color: var(--text-color);
+    font-size: 1.1em;
+    line-height: 1.8;
+    margin: 0;
+    padding: 15px;
+    background: rgba(52, 152, 219, 0.05);
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+.hours::before {
+    content: '🕒';
+    font-size: 1.5em;
+    display: block;
+    margin-bottom: 10px;
 }
 
 .courses-grid {
@@ -127,6 +151,7 @@ p {
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     transition: transform 0.3s ease;
     border: 1px solid rgba(0,0,0,0.05);
+    overflow: hidden;
 }
 
 .course-card:hover {
@@ -135,24 +160,35 @@ p {
 
 .course-card h3 {
     color: var(--primary-color);
-    margin-bottom: 12px;
-    font-size: 1.2em;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+    word-wrap: break-word;
 }
 
 .course-description {
-    margin-bottom: 15px;
     color: var(--text-color);
+    margin-bottom: 15px;
+    font-size: 0.95em;
+    line-height: 1.6;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .course-details {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    margin-top: 15px;
+}
+
+.course-details span {
+    background: rgba(52, 152, 219, 0.1);
+    padding: 8px;
+    border-radius: 4px;
     font-size: 0.9em;
-    color: var(--text-color);
-    background: rgba(52, 152, 219, 0.05);
-    padding: 12px;
-    border-radius: 8px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .teachers-grid {
@@ -170,6 +206,7 @@ p {
     text-align: center;
     transition: transform 0.3s ease;
     border: 1px solid rgba(0,0,0,0.05);
+    overflow: hidden;
 }
 
 .teacher-card:hover {
@@ -194,6 +231,7 @@ p {
     color: var(--primary-color);
     margin-bottom: 8px;
     font-size: 1.2em;
+    word-wrap: break-word;
 }
 
 .specialization {
@@ -202,12 +240,17 @@ p {
     margin-bottom: 12px;
     font-size: 0.9em;
     font-weight: 500;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .bio {
     font-size: 0.9em;
     color: var(--text-color);
     line-height: 1.5;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 @media (max-width: 768px) {
