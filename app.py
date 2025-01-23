@@ -284,8 +284,34 @@ def edit_course(course_id):
     teachers = Teacher.query.all()
     return render_template('admin/edit_course.html', course=course, teachers=teachers)
 
-
-
+@app.route('/change-password', methods=['GET', 'POST'])
+def change_password():
+    if request.method == 'POST':
+        username = request.form['username']
+        old_password = request.form['old_password']
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+        
+        user = User.query.filter_by(username=username).first()
+        
+        if not user:
+            flash('Nieprawidłowa nazwa użytkownika')
+            return redirect(url_for('change_password'))
+            
+        if not check_password_hash(user.password_hash, old_password):
+            flash('Nieprawidłowe obecne hasło')
+            return redirect(url_for('change_password'))
+            
+        if new_password != confirm_password:
+            flash('Nowe hasła nie są identyczne')
+            return redirect(url_for('change_password'))
+            
+        user.password_hash = generate_password_hash(new_password)
+        db.session.commit()
+        flash('Hasło zostało zmienione pomyślnie')
+        return redirect(url_for('login'))
+        
+    return render_template('admin/change_password.html')
 
 if __name__ == '__main__':
     with app.app_context():

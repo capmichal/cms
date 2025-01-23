@@ -68,3 +68,18 @@ button:hover {
     margin-top: 20px;
     text-align: center;
 }
+
+.password-change-link, .login-link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.password-change-link a, .login-link a {
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.password-change-link a:hover, .login-link a:hover {
+    text-decoration: underline;
+}
