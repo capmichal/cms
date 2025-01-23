@@ -147,26 +147,39 @@ def manage_teachers():
 @login_required
 def add_teacher():
     if request.method == 'POST':
-        photo = request.files['photo']
-        if photo:
-            filename = secure_filename(photo.filename)
-            photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            photo_path = filename
-        else:
-            photo_path = None
+        # Check if email already exists
+        existing_teacher = Teacher.query.filter_by(email=request.form['email']).first()
+        if existing_teacher:
+            flash('Nauczyciel z tym adresem email już istnieje w Twojej szkole!')
+            return redirect(url_for('manage_teachers'))
+            
+        try:
+            photo = request.files['photo']
+            if photo:
+                filename = secure_filename(photo.filename)
+                photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                photo_path = filename
+            else:
+                photo_path = None
 
-        teacher = Teacher(
-            first_name=request.form['first_name'],
-            last_name=request.form['last_name'],
-            email=request.form['email'],
-            specialization=request.form['specialization'],
-            bio=request.form['bio'],
-            photo_path=photo_path
-        )
-        db.session.add(teacher)
-        db.session.commit()
-        flash('Nauczyciel został dodany')
-        return redirect(url_for('manage_teachers'))
+            teacher = Teacher(
+                first_name=request.form['first_name'],
+                last_name=request.form['last_name'],
+                email=request.form['email'],
+                specialization=request.form['specialization'],
+                bio=request.form['bio'],
+                photo_path=photo_path
+            )
+            db.session.add(teacher)
+            db.session.commit()
+            flash('Nauczyciel został dodany')
+            return redirect(url_for('manage_teachers'))
+            
+        except Exception as e:
+            db.session.rollback()
+            flash('Wystąpił błąd podczas dodawania nauczyciela')
+            return redirect(url_for('manage_teachers'))
+            
     return render_template('admin/add_teacher.html')
 
 
@@ -191,30 +204,44 @@ def edit_teacher(teacher_id):
     teacher = Teacher.query.get(teacher_id)
     
     if request.method == 'POST':
-        teacher.first_name = request.form['first_name']
-        teacher.last_name = request.form['last_name']
-        teacher.email = request.form['email']
-        teacher.specialization = request.form['specialization']
-        teacher.bio = request.form['bio']
-        
-        # Obsługa zdjęcia
-        if 'photo' in request.files:
-            file = request.files['photo']
-            if file and file.filename:
-                # Usuń stare zdjęcie jeśli istnieje
-                if teacher.photo_path:
-                    old_photo_path = os.path.join(app.config['UPLOAD_FOLDER'], teacher.photo_path)
-                    if os.path.exists(old_photo_path):
-                        os.remove(old_photo_path)
-                
-                # Zapisz nowe zdjęcie
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                teacher.photo_path = filename
+        # Check if email changed and if new email already exists
+        new_email = request.form['email']
+        if new_email != teacher.email:
+            existing_teacher = Teacher.query.filter_by(email=new_email).first()
+            if existing_teacher:
+                flash('Nauczyciel z tym adresem email już istnieje w Twojej szkole!')
+                return redirect(url_for("manage_teachers"))
 
-        db.session.commit()
-        flash('Dane nauczyciela zostały zaktualizowane')
-        return redirect(url_for('manage_teachers'))
+        try:
+            teacher.first_name = request.form['first_name']
+            teacher.last_name = request.form['last_name']
+            teacher.email = new_email
+            teacher.specialization = request.form['specialization']
+            teacher.bio = request.form['bio']
+            
+            # Obsługa zdjęcia
+            if 'photo' in request.files:
+                file = request.files['photo']
+                if file and file.filename:
+                    # Usuń stare zdjęcie jeśli istnieje
+                    if teacher.photo_path:
+                        old_photo_path = os.path.join(app.config['UPLOAD_FOLDER'], teacher.photo_path)
+                        if os.path.exists(old_photo_path):
+                            os.remove(old_photo_path)
+                    
+                    # Zapisz nowe zdjęcie
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                    teacher.photo_path = filename
+
+            db.session.commit()
+            flash('Dane nauczyciela zostały zaktualizowane')
+            return redirect(url_for('manage_teachers'))
+            
+        except Exception as e:
+            db.session.rollback()
+            flash('Wystąpił błąd podczas aktualizacji danych nauczyciela')
+            return redirect(url_for("manage_teachers"))
         
     return render_template('admin/edit_teacher.html', teacher=teacher)
 
